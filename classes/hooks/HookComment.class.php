@@ -24,16 +24,23 @@ class PluginL10n_HookComment extends Hook {
     public function TemplateCommentTreeBegin($aData)
     {
         if ($aData['sTargetType'] == 'topic') {
-            $id = "comment_count_{$aData['iTargetId']}";
-            if (false === ($data = $this->Cache_Get($id))) {
-                $data = 0;
-                foreach ($this->Topic_GetNestedTopics($this->Topic_GetTopicById($aData['iTargetId'])) as $oTopic) {
-                    $data += $oTopic->getCountComment();
+            $oTopic = $this->Topic_GetTopicById($aData['iTargetId']);
+            $commentCount = $oTopic->getExtraData('collapsedCount');
+
+            if (Config::Get('plugin.l10n.allowed_collapse_comments')) {
+                if ($commentCount !== null) {
+                    $data = $commentCount;
                 }
-                $this->Cache_Set($data, $id, array('comment_update', 'comment_new_topic'), 60 * 60 * 24 * 3);
+                else {
+                    $data = 0;
+                }
+            }
+            else {
+                $data = $oTopic->GetTopicCountComment();
             }
 
-            $this->Viewer_Assign('iCountComment', 125);
+            $this->Viewer_Assign('iCountComment', $data);
+            $this->Viewer_Display(Plugin::GetTemplatePath(__CLASS__) . 'comment_count.tpl');
         }
     }
 }

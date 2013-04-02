@@ -26,4 +26,13 @@ class PluginL10n_ModuleTopic_EntityTopic extends PluginL10n_Inherit_ModuleTopic_
         return $this->_aData['topic_lang'];
     }
 
+    public function setExtraData($keyName, $value)
+    {
+        return $this->setExtraValue($keyName, $value);
+    }
+
+    public function getExtraData($keyName)
+    {
+        return $this->getExtraValue($keyName);
+    }
 }

@@ -248,4 +248,37 @@ class PluginL10n_ModuleTopic extends PluginL10n_Inherit_ModuleTopic
         return $data;
     }
 
+    public function increaseTopicCountComment($sTopicId)
+    {
+        if (Config::Get('plugin.l10n.allowed_collapse_comments')) {
+            $oTopic = $this->Topic_GetTopicById($sTopicId);
+            $commentsCount = 0;
+            $aNestedTopics = $this->Topic_GetNestedTopics($oTopic);
+            foreach ($aNestedTopics as $oTopicItem) {
+                $commentsCount += $oTopicItem->getTopicCountComment();
+            }
+
+            foreach ($aNestedTopics as $oTopicItem) {
+                $oTopicItem->setExtraData('collapsedCount', $commentsCount + 1);
+                if ($oTopicItem->GetTopicId() == $sTopicId) {
+                    $oTopicItem->SetTopicCountComment($oTopicItem->GetTopicCountComment() + 1);
+                }
+                $this->Topic_UpdateTopic($oTopicItem);
+            }
+
+            return true;
+        }
+        else {
+            return parent::increaseTopicCountComment($sTopicId);
+        }
+    }
+
+    public function UpdateTopicContent($oTopic)
+    {
+        $this->Cache_Clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG,array('topic_update',"topic_update_user_{$oTopic->getUserId()}"));
+        $this->Cache_Delete("topic_{$oTopic->getId()}");
+
+        return $this->oMapperTopic->UpdateContent($oTopic);
+    }
+
 }

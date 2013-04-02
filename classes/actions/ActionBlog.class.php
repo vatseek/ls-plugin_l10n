@@ -124,7 +124,7 @@ class PluginL10n_ActionBlog extends PluginL10n_Inherit_ActionBlog
         $oCommentNew->setTextHash(md5($sText));
         $oCommentNew->setPublish($oTopic->getPublish());
 
-        if ($oCommentParent && $oCommentNew->getTargetType() == 'topic') {
+        if (Config::Get('plugin.l10n.allowed_collapse_comments') && $oCommentParent && $oCommentNew->getTargetType() == 'topic') {
             $oCommentNew->setTargetId($oCommentParent->getTargetId());
             $oCommentNew->setTargetParentId($oCommentParent->getTargetParentId());
         }

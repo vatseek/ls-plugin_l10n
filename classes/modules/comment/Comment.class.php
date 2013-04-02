@@ -64,7 +64,7 @@ class PluginL10n_ModuleComment extends PluginL10n_Inherit_ModuleComment
     public function GetCommentsNewByTargetId($sId,$sTargetType,$sIdCommentLast) {
         if (false === ($aComments = $this->Cache_Get("comment_target_{$sId}_{$sTargetType}_{$sIdCommentLast}"))) {
 
-            if ( $sTargetType == 'topic') {
+            if ( $sTargetType == 'topic' && Config::Get('plugin.l10n.allowed_collapse_comments')) {
                 $aNestedTopicsId =  array_keys($this->Topic_GetNestedTopics($this->Topic_GetTopicById($sId)));
                 $aComments=$this->oMapper->GetCommentsNewByTargetId($aNestedTopicsId,$sTargetType,$sIdCommentLast);
             }

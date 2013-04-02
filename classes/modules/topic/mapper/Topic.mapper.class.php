@@ -266,4 +266,9 @@ class PluginL10n_ModuleTopic_MapperTopic extends PluginL10n_Inherit_ModuleTopic_
         return false;
     }
 
+    public function UpdateContent($oTopic)
+    {
+        return $this->UpdateTopicContent($oTopic);
+    }
+
 }
