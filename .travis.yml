@@ -49,5 +49,4 @@ before_script:
 
 
 script: 
-  - HTTP_APP_ENV=test cd tests/behat/ && php behat.phar --strict
-  - HTTP_APP_ENV=test cd tests/behat/ && php behat.phar --config='../../plugins/l10n/tests/behat/behat.yml' --strict
+  - HTTP_APP_ENV=test cd tests/behat/ && php behat.phar --strict && php behat.phar --config='../../plugins/l10n/tests/behat/behat.yml' --strict
